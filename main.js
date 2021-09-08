@@ -1,5 +1,6 @@
 img="";
 status="";
+objects=[];
 
 function setup(){
     canvas=createCanvas(640,480);
@@ -15,17 +16,18 @@ function preload(){
 
 function draw(){
     image(img,0,0,640,480);
-    fill('#1fab38');
-    text("Dog",70,65);
-    noFill();
-    stroke('#1fab38');
-    rect(50,70,550,380);
+    if(status!=""){
+        for(i=0;i<objects.length;i++){
+            document.getElementById("status").innerHTML="Status: Objects Detected";
+            fill("#c91e18");
+            percent=floor(objects[i].confidence*100);
+            text(objects[i].label+" "+percent+"%",objects[i].x,objects[i].y);
+            noFill();
+            stroke("#c91e18");
+            rect(objects[i].x,objects[i].y,objects[i].width,objects[i].height);
+        }
+    }
 
-    fill('#1fab38');
-    text("Cat",320,100);
-    noFill();
-    stroke('#1fab38');
-    rect(280,100,330,380);
 }
 
 function modelLoaded(){
@@ -40,5 +42,6 @@ function gotResult(error,results){
     }
     else{
         console.log(results);
+        objects=results;
     }
 }
